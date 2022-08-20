@@ -12,14 +12,13 @@ using Models;
 
 namespace HireMe.StoredProcedures.Services
 {
-    public class spProduct : IspProduct
+    public class spFavourite : IspFavourite
     {
         private readonly IConfiguration _config;
-
-        private string StoreName = "spProduct";
+        private string StoreName = "spFavourite";
         private string ConnectionString { get; set; }
 
-        public spProduct(IConfiguration config)
+        public spFavourite(IConfiguration config)
         {
             _config = config;
             ConnectionString = _config.GetConnectionString("DefaultConnection");
@@ -34,8 +33,8 @@ namespace HireMe.StoredProcedures.Services
 
             if (AutoFindParams)
             {
-                var entity = new Product();
-                entity.Update((ProductInput)parameters, ApproveType.Waiting, userId);
+                var entity = new Favourites();
+                entity.Update((FavouriteInput)parameters, userId);
 
                 param = DapperPropertiesHelper.AutoParameterFind(entity, skipAttribute);
                 param.Add("newId", dbType: DbType.Int32, size: 50, direction: ParameterDirection.Output);
@@ -107,17 +106,7 @@ namespace HireMe.StoredProcedures.Services
                 return result;
             }
         }
-        public async Task<T> GetByTitleAsync<T>(string title)
-        {
-            using (IDbConnection connection = Connection)
-            {
-                connection.Open();
-                var result = await connection.QueryFirstOrDefaultAsync<T>(StoreName, new { Title = title.Replace(' ', '-'), StatementType = "SelectByTitle" }, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
-                connection.Close();
 
-                return result;
-            }
-        }
         public async Task<int> GetAllCountBy(object parameters)
         {
             var param = new DynamicParameters();
@@ -135,22 +124,6 @@ namespace HireMe.StoredProcedures.Services
             }
         }
 
-        public async Task<bool> AddRating(object parameters)
-        {
-            var param = new DynamicParameters();
-            var model = new { StatementType = "AddRating" };
-            param.AddDynamicParams(model);
-            param.AddDynamicParams(parameters);
-
-            using (IDbConnection connection = Connection)
-            {
-                connection.Open();
-                var result = await connection.ExecuteAsync(StoreName, param, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
-                connection.Close();
-
-                return result > 0;
-            }
-        }
     }
 
 }

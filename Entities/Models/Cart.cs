@@ -9,7 +9,7 @@ namespace Entities.Models
     {
         public Cart()
         {
-            Products = new HashSet<Product>();
+           CartItems = new HashSet<CartItem>();
         }
 
         public int Id { get; set; }
@@ -19,7 +19,7 @@ namespace Entities.Models
         public DateTime ExpiredOn { get; set; }
 
        // [NotMapped]
-        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<CartItem> CartItems { get; set; }
 
         [NotMapped]
         public string StatementType { get; set; }
@@ -28,7 +28,7 @@ namespace Entities.Models
         {
             Id = input.Id;
 
-            Products = input.Products;
+            CartItems = input.CartItems;
 
             if(!String.IsNullOrEmpty(userId))
             UserId = userId;

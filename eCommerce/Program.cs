@@ -80,6 +80,8 @@ builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IspCategories, spCategories>();
 builder.Services.AddScoped<IspOrder, spOrder>();
 builder.Services.AddScoped<IspProduct, spProduct>();
+builder.Services.AddScoped<IspCart, spCart>();
+builder.Services.AddScoped<IspFavourite, spFavourite>();
 builder.Services.AddTransient<IProductExtensionService, ProductExtensionService>();
 builder.Services.AddScoped<JwtHandler>();
 builder.Services.AddScoped<IAccountService, AccountService>();

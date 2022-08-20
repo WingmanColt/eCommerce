@@ -16,6 +16,8 @@ namespace Data
         public DbSet<Images> Image { get; set; }
         public DbSet<Order> Order { get; set; }
         public DbSet<Cart> Cart { get; set; }
+        public DbSet<CartItem> CartItem { get; set; }
+
         public DbSet<Favourites> Favourites { get; set; }
     }
 }

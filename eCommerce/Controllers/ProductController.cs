@@ -71,16 +71,17 @@ namespace eCommerce.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [Route("info/{id}")]
-        public async Task<IActionResult> Details(int id)
+        [Route("info/{title}")]
+        public async Task<IActionResult> Details(string title)
         {
-            var entity = await _spProductService.GetByIdAsync<ProductVW>(id);
+            var entity = await _spProductService.GetByTitleAsync<ProductVW>(title);
             if (entity is null)
             {
                 return NotFound(itemNotFound);
             }
 
-           // entity.Views++;
+            entity.Image = _extProductService.GetImagesAsync(entity.Id);
+            entity.Variant = _extProductService.GetVariantsAsync(entity.Id);
 
             return this.Ok(entity);
         }

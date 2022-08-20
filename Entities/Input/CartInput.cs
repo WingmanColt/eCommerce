@@ -9,6 +9,7 @@ namespace Entities.Models
         public double TotalCost { get; set; }
         public int TotalItems { get; set; }
         public DateTime ExpiredOn { get; set; }
-        public virtual ICollection<Product> Products { get; set; }
+
+        public virtual ICollection<CartItem> CartItems { get; set; }
     }
 }
