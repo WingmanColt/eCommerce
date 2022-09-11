@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoredProcedures", "StoredProcedures\StoredProcedures.csproj", "{DC7F421A-AE6D-4B5B-BDAF-91E6BC664E51}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Angular", "Angular\Angular.csproj", "{78461E8C-1B3B-42DC-A052-CB6279D9A6FE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,10 +45,6 @@ Global
 		{DC7F421A-AE6D-4B5B-BDAF-91E6BC664E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC7F421A-AE6D-4B5B-BDAF-91E6BC664E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC7F421A-AE6D-4B5B-BDAF-91E6BC664E51}.Release|Any CPU.Build.0 = Release|Any CPU
-		{78461E8C-1B3B-42DC-A052-CB6279D9A6FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{78461E8C-1B3B-42DC-A052-CB6279D9A6FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{78461E8C-1B3B-42DC-A052-CB6279D9A6FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{78461E8C-1B3B-42DC-A052-CB6279D9A6FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

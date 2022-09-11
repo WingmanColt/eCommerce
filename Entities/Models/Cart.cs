@@ -20,7 +20,10 @@ namespace Entities.Models
 
        // [NotMapped]
         public virtual ICollection<CartItem> CartItems { get; set; }
+<<<<<<< HEAD
 
+=======
+>>>>>>> f0b8104e1574131bfb7d46f64ab0d76e7a496190
 
         [NotMapped]
         public string StatementType { get; set; }

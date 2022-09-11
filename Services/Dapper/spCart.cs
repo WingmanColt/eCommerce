@@ -96,20 +96,31 @@ namespace HireMe.StoredProcedures.Services
             }
         }
 
+<<<<<<< HEAD
         public async Task<T> GetByUserIdAsync<T>(string id)
+=======
+        public async Task<T> GetByIdAsync<T>(int id)
+>>>>>>> f0b8104e1574131bfb7d46f64ab0d76e7a496190
         {
             using (IDbConnection connection = Connection)
             {
                 connection.Open();
+<<<<<<< HEAD
                 var result = await connection.QueryFirstOrDefaultAsync<T>(StoreName, new { userId = id, StatementType = "SelectByUserId" }, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
+=======
+                var result = await connection.QueryFirstOrDefaultAsync<T>(StoreName, new { Id = id > 0 ? id : 0, StatementType = "Select" }, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
+>>>>>>> f0b8104e1574131bfb7d46f64ab0d76e7a496190
                 connection.Close();
 
                 return result;
             }
         }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> f0b8104e1574131bfb7d46f64ab0d76e7a496190
         public async Task<int> GetAllCountBy(object parameters)
         {
             var param = new DynamicParameters();

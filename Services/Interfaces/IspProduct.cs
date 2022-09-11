@@ -14,7 +14,11 @@ namespace Services.Interfaces
         Task<IAsyncEnumerable<ProductVW>> GetAll2(object parameters, GetActionEnum state, bool AutoFindParams, string skipAttribute);
 
         Task<int> GetAllCountBy(object parameters);
+<<<<<<< HEAD
         Task<ProductVW> GetByIdAsync(int id);
+=======
+        Task<T> GetByIdAsync<T>(int id);
+>>>>>>> f0b8104e1574131bfb7d46f64ab0d76e7a496190
         Task<T> GetByTitleAsync<T>(string title);
 
     }

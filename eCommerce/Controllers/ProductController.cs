@@ -75,11 +75,18 @@ namespace eCommerce.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
+<<<<<<< HEAD
         [Route("info")]
         public async Task<IActionResult> Details(string title)
         {
             var entity = await _spProductService.GetByTitleAsync<ProductVW>(title);
 
+=======
+        [Route("info/{title}")]
+        public async Task<IActionResult> Details(string title)
+        {
+            var entity = await _spProductService.GetByTitleAsync<ProductVW>(title);
+>>>>>>> f0b8104e1574131bfb7d46f64ab0d76e7a496190
             if (entity is null)
             {
                 return NotFound(itemNotFound);

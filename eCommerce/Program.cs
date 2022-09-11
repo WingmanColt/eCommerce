@@ -81,8 +81,11 @@ builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IspCategories, spCategories>();
 builder.Services.AddScoped<IspProduct, spProduct>();
 builder.Services.AddScoped<IspCart, spCart>();
+<<<<<<< HEAD
 builder.Services.AddScoped<IspOrder, spOrder>();
 builder.Services.AddScoped<IspCheckout, spCheckout>();
+=======
+>>>>>>> f0b8104e1574131bfb7d46f64ab0d76e7a496190
 builder.Services.AddScoped<IspFavourite, spFavourite>();
 builder.Services.AddTransient<IProductExtensionService, ProductExtensionService>();
 builder.Services.AddScoped<JwtHandler>();

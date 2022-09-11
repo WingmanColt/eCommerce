@@ -200,6 +200,20 @@ namespace HireMe.StoredProcedures.Services
                 return result;
             }
         }
+<<<<<<< HEAD
+=======
+        public async Task<T> GetByTitleAsync<T>(string title)
+        {
+            using (IDbConnection connection = Connection)
+            {
+                connection.Open();
+                var result = await connection.QueryFirstOrDefaultAsync<T>(StoreName, new { Title = title.Replace(' ', '-'), StatementType = "SelectByTitle" }, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
+                connection.Close();
+
+                return result;
+            }
+        }
+>>>>>>> f0b8104e1574131bfb7d46f64ab0d76e7a496190
         public async Task<int> GetAllCountBy(object parameters)
         {
             var param = new DynamicParameters();

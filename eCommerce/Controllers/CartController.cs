@@ -1,6 +1,9 @@
 ﻿using Entities.Models;
 using Entities.ViewModels;
+<<<<<<< HEAD
 using Entities.ViewModels.Products;
+=======
+>>>>>>> f0b8104e1574131bfb7d46f64ab0d76e7a496190
 using HireMe.StoredProcedures.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
@@ -14,17 +17,22 @@ namespace eCommerce.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly IspCart _spCartService;
+<<<<<<< HEAD
         private readonly IspProduct _spProductService;
         private readonly ICartItemService _cartItemService;
         private readonly IProductExtensionService _extProductService;
 
         private readonly string cartNotFound = "The cart is not found.";
+=======
+
+>>>>>>> f0b8104e1574131bfb7d46f64ab0d76e7a496190
         private readonly string itemNotFound = "The cart item is not found.";
         private readonly string userNotFound = "User is not found.";
         private readonly string noResults = "There is no results to show.";
 
         public CartController(
             IAccountService accountService,
+<<<<<<< HEAD
             ICartItemService cartItemService,
             IspProduct spProductService,
             IProductExtensionService extProductService,
@@ -57,6 +65,16 @@ namespace eCommerce.Controllers
         }
         [HttpGet]
         [Route("get-cart-items")]
+=======
+            IspCart spCartService)
+        {
+            _spCartService = spCartService;
+            _accountService = accountService;   
+        }
+
+        [HttpGet]
+        [Route("get-all")]
+>>>>>>> f0b8104e1574131bfb7d46f64ab0d76e7a496190
         public async Task<IActionResult> GetAll([FromHeader] string accessToken)
         {
             string userId = _accountService.ValidateToken(accessToken);
@@ -66,6 +84,7 @@ namespace eCommerce.Controllers
                 return NotFound(userNotFound);
             }
 
+<<<<<<< HEAD
             var cart = await _spCartService.GetByUserIdAsync<CartVW>(userId);
             if (cart is null)
             {
@@ -101,10 +120,15 @@ namespace eCommerce.Controllers
 
             cartVW.CartItems = _cartItemService.GetAllByCart(cartVW.Id);
             if (!await cartVW.CartItems.AnyAsync())
+=======
+            var result = await _spCartService.GetAll<CartVW>(new { UserId =  userId}, GetActionEnum.GetAllBy, false, null);
+            if (!await result.AnyAsync())
+>>>>>>> f0b8104e1574131bfb7d46f64ab0d76e7a496190
             {
                 return NotFound(noResults);
             }
 
+<<<<<<< HEAD
             List<ProductVW> productsList = new List<ProductVW>();
             ProductVW product;
             await foreach (var entity in cartVW.CartItems)
@@ -119,6 +143,12 @@ namespace eCommerce.Controllers
             return Ok(cartVW);
         }
 
+=======
+            return Ok(result);
+        }
+
+
+>>>>>>> f0b8104e1574131bfb7d46f64ab0d76e7a496190
         [HttpPost]
         [Route("create")]
         public async Task<IActionResult> Create([FromHeader] string accessToken, [FromBody] CartInput Input)
@@ -139,9 +169,16 @@ namespace eCommerce.Controllers
             return this.Ok(entity);
         }
 
+<<<<<<< HEAD
         [HttpPost]
         [Route("add-item")]
         public async Task<IActionResult> CreateCartItem([FromHeader] string accessToken, [FromBody] CartItem Input)
+=======
+
+        [HttpDelete]
+        [Route("delete/{id}")]
+        public async Task<IActionResult> Delete([FromHeader] string accessToken, int id)
+>>>>>>> f0b8104e1574131bfb7d46f64ab0d76e7a496190
         {
             string userId = _accountService.ValidateToken(accessToken);
 
@@ -150,6 +187,7 @@ namespace eCommerce.Controllers
                 return NotFound(userNotFound);
             }
 
+<<<<<<< HEAD
             var cart = await _spCartService.GetByUserIdAsync<CartVW>(userId);
             if (cart is null)
             {
@@ -181,6 +219,9 @@ namespace eCommerce.Controllers
             }
 
             var entity = await _cartItemService.Delete(product.Id);
+=======
+            var entity = await _spCartService.CRUD(new { Id = id }, ActionEnum.Delete, false, null, userId);
+>>>>>>> f0b8104e1574131bfb7d46f64ab0d76e7a496190
             if (entity is null)
             {
                 return NotFound(itemNotFound);
