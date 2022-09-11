@@ -1,0 +1,46 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Tax Details</h5>
+                </div>
+                <div class="card-body">
+                    <div id="batchDelete" class="custom-datatable">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" sortable="detail" (sort)="onSort($event)">Currency Title</th>
+                                        <th scope="col" sortable="tax_schedule" (sort)="onSort($event)">USD</th>
+                                        <th scope="col" sortable="rate" (sort)="onSort($event)" >Code</th>
+                                        <th scope="col" sortable="total_amount" (sort)="onSort($event)">Exchange Rate</th>
+                                        <th scope="col"  (sort)="onSort($event)">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of tableItem$ | async ">
+                                        <td scope="row">
+                                           <span>{{item.detail}}</span> 
+                                        </td>
+                                        <td>
+                                            {{item.tax_schedule}}
+                                        </td>
+                                        <td>{{item.rate}}</td>
+                                        <td>{{item.total_amount}}</td>
+                                        <td>
+                                            <a href="javascript:void(0)"><i class='fa fa-edit f-12'></i></a>&nbsp;
+                                            <a href="javascript:void(0)"><i class="fa fa-trash-o"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends-->

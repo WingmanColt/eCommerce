@@ -1,0 +1,80 @@
+<!--                    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm.value);" class="theme-form">
+                        {{ firstNameModel.errors | json}}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="Firstname">First Name</label>
+                                <input #firstNameModel="ngModel" type="text" id="Firstname" name="Firstname"
+                                    class="form-control" required ngModel appCustomIdValidator>
+                                <div *ngIf="firstNameModel.touched && firstNameModel.invalid" class="error">Firstname is
+                                    required</div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <label for="review">Last Name</label>
+                                <input type="text" class="form-control" id="lname" placeholder="Last Name" required=""
+                                    [(ngModel)]="registerUserRequest.lastName">
+                            </div>
+                        </div>-->
+
+<app-breadcrumb [title]="'Register'" [breadcrumb]="'Register'"></app-breadcrumb>
+<!-- section start -->
+<section class="register-page section-b-space">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>Create Account</h3>
+                <div class="theme-card">
+                    <form [formGroup]="form" (ngSubmit)="onSubmit(this.form.value)" class="theme-form">
+
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <label for="Firstname">First Name <b
+                                        *ngIf="firstNameControl.touched && firstNameControl.invalid" class="error">is
+                                        required</b></label>
+                                <input type="text" id="FirstName" name="FirstName" class="form-control"
+                                    placeholder="First Name" formControlName="FirstName">
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <label for="review">Last Name <b
+                                        *ngIf="lastNameControl.touched && lastNameControl.invalid" class="error">is
+                                        required</b></label>
+                                <input type="text" class="form-control" id="LastName" name="LastName"
+                                    placeholder="Last Name" formControlName="LastName">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <label for="email">Email <b *ngIf="emailControl.touched && emailControl.invalid"
+                                        class="error">is required</b></label>
+                                <input type="email" class="form-control" id="Email" name="Email" placeholder="Email"
+                                    formControlName="Email">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="pass">Password <b *ngIf="passwordControl.touched && passwordControl.invalid"
+                                        class="error">is required</b></label>
+                                <input type="password" class="form-control" id="Password" name="Password"
+                                    placeholder="Enter your password" formControlName="Password">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="pass">Confirm Password <b
+                                        *ngIf="cpasswordControl.touched && cpasswordControl.invalid" class="error">is
+                                        required</b></label>
+                                <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword"
+                                    placeholder="Confirm your password" formControlName="ConfirmPassword">
+                            </div>
+                        </div>
+                        <button type="submit" [disabled]="form.invalid" class="btn btn-solid">Continue</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--Section ends-->

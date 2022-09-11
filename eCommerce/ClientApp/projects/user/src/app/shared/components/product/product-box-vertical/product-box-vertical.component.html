@@ -1,0 +1,21 @@
+<div class="media d-flex align-items-center">
+    <a [routerLink]="['/shop/product/info/', product.title.replace(' ', '-')]">
+        <img [defaultImage]="ImageSrc ? ImageSrc : 'assets/images/product/placeholder.jpg'"
+            [lazyLoad]="ImageSrc ? ImageSrc : product.image[0].src" class="img-fluid lazy-loading"
+            alt="{{ product.image[0].alt }}">
+    </a>
+    <div class="media-body align-self-center">
+        <div class="rating">
+            <bar-rating [rate]="product.rating" [readOnly]="true"></bar-rating>
+        </div>
+        <a [routerLink]="['/shop/product/info/', product.title.replace(' ', '-')]">
+            <h6>{{ product.title | titlecase }}</h6>
+        </a>
+        <h4>{{ product?.price * currency?.price | discount:product | currency:currency?.currency:'symbol' }}</h4>
+        <ul class="color-variant">
+            <li [class]="color" *ngFor="let color of Color(product?.variant)" [ngStyle]="{'background-color': color}"
+                (click)="ChangeVariants(color, product)">
+            </li>
+        </ul>
+    </div>
+</div>

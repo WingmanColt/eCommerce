@@ -1,0 +1,19 @@
+@import "~bootstrap/scss/bootstrap";
+@import 'feather-icon/feather-icon';
+
+@import 'theme/variables';
+@import 'theme/admin_style';
+@import 'theme/rtl';
+@import 'theme/chartist.scss';
+@import 'theme/datatable';
+@import 'icons/icoicon/icons';
+// Flag contents
+@import 'flag-icon/flag-icon-base';
+@import 'flag-icon/flag-icon-more';
+@import 'flag-icon/flag-icon-list';
+@import 'icons/themify/themify-icons';
+@import '~dropzone/dist/min/dropzone.min.css';
+@import '../../../../../node_modules/ngx-owl-carousel-o/lib/styles/scss/owl.carousel';
+@import '../../../../../node_modules/ngx-owl-carousel-o/lib/styles/scss/owl.theme.default';
+@import "../../../../../node_modules/@ag-grid-community/core/dist/styles/ag-grid";
+@import "../../../../../node_modules/@ag-grid-community/core/dist/styles/ag-theme-alpine.min.css";

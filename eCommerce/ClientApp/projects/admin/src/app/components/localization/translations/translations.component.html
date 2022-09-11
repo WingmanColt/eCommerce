@@ -1,0 +1,51 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Translations</h5>
+                </div>
+                <div class="card-body">
+                    <div id="batchDelete" class="custom-datatable">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" sortable="user_key" (sort)="onSort($event)">User Key</th>
+                                        <th scope="col" sortable="russian" (sort)="onSort($event)">Russian</th>
+                                        <th scope="col" sortable="arabic" (sort)="onSort($event)">Arbic</th>
+                                        <th scope="col" sortable="english" (sort)="onSort($event)">English</th>
+                                        <th scope="col" >Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of tableItem$ | async ">
+                                        <td scope="row">
+                                           <span>{{item.user_key}}</span> 
+                                        </td>
+                                        <td>
+                                            {{item.russian}}
+                                        </td>
+                                        <td>{{item.arabic}}</td>
+                                        <td>{{item.english}}</td>
+                                        <td>
+                                            <a href="javascript:void(0)"><i class='fa fa-edit f-12'></i></a>&nbsp;
+                                            <a href="javascript:void(0)"><i class="fa fa-trash-o"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-center p-2">
+                                <ngb-pagination
+                                  [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
+                                </ngb-pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends-->

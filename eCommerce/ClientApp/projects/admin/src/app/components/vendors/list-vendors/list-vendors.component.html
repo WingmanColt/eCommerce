@@ -1,0 +1,47 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h5>Vendor Details</h5>
+            </div>
+            <div class="card-body vendor-table">
+                <div id="batchDelete" class="custom-datatable vendor-list">
+                    <div class="table-responsive ">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Vendors</th>
+                                    <th scope="col">Products</th>
+                                    <th scope="col" sortable="name" >Store Name</th>
+                                    <th scope="col" sortable="name" >Date</th>
+                                    <th scope="col" sortable="name" >Wallet Balance</th>
+                                    <th scope="col" sortable="name" >Revenue</th>
+                                    <th scope="col" sortable="name" >Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of vendors">
+                                    <td scope="row">
+                                        <img [src]="item.vendor" class="imgTable" style="width: 20px">
+                                       <span>{{item.name}}</span> 
+                                    </td>
+                                    <td>
+                                        {{item.products}}
+                                    </td>
+                                    <td>{{item.store_name}}</td>
+                                    <td>{{item.date}}</td>
+                                    <td>{{item.balance}}</td>
+                                    <td>{{item.revenue}}</td>
+                                    <td>
+                                        <a href="javascript:void(0)"><i class='fa fa-edit f-12'></i></a>&nbsp;
+                                        <a href="javascript:void(0)"><i class="fa fa-trash-o"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Container-fluid Ends-->

@@ -1,0 +1,178 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Add Product</h5>
+        </div>
+        <div class="card-body">
+
+          <form [formGroup]="productForm" (ngSubmit)="onSubmit(this.productForm.value)" class="needs-validation">
+
+            <div class="row product-adding">
+              <div class="col-xl-5">
+                <div class="add-product">
+                  <div class="row">
+                    <div class="col-xl-9 xl-50 col-sm-6 col-9">
+                      <img src="assets/images/pro3/1.jpg" alt="" class="img-fluid image_zoom_1">
+                    </div>
+                    <div class="col-xl-3 xl-50 col-sm-6 col-3">
+                      <ul class="file-upload-product">
+                        <li *ngFor="let item of url; let i=index">
+                          <div class="box-input-file">
+                            <input class="upload" type="file" [formControl]="productForm.controls['image']"
+                              (change)="readUrl($event,i)">
+                            <img class="imgUpload" alt="" [src]="item.img">
+                          </div>
+
+
+                        </li>
+                      </ul>
+
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xl-4 xl-50 col-sm-6 col-4" *ngFor="let item of url; let i=index">
+                      <label for="validationCustom01" class="mb-0">Variant color #{{i}}:</label>
+                      <input class="form-control" type="text" [formControl]="productForm.controls['color']">
+                      <input class="form-control" type="text" [formControl]="productForm.controls['size']">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-7">
+                <div class="add-product-form">
+                  <div class="form-group row">
+                    <div class="col-xl-3 col-sm-4 ">
+                      <label for="validationCustom01" class="mb-0">Title
+                        :</label>
+                    </div>
+                    <div class="col-xl-8 col-sm-7">
+                      <input class="form-control" id="validationCustom01" type="text"
+                        [formControl]="productForm.controls['title']" required>
+                      <div *ngIf="productForm.controls.title.touched && productForm.controls.title.errors?.required"
+                        class="text text-danger">
+                        Title is required.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <div class="col-xl-3 col-sm-4">
+                      <label for="validationCustom02" class="mb-0">Price :</label>
+                    </div>
+                    <div class="col-xl-8 col-sm-7">
+                      <input class="form-control" id="validationCustom02" type="number"
+                        [formControl]="productForm.controls['price']" required="">
+                    </div>
+                    <div *ngIf="productForm.controls.price.touched && productForm.controls.price.errors?.required"
+                      class="text text-danger">
+                      Product Price is required.
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <div class="col-xl-3 col-sm-4">
+                      <label for="validationCustom03" class="mb-0">Details
+                        :</label>
+                    </div>
+                    <div class="col-xl-8 col-sm-7">
+                      <input class="form-control" id="validationCustom03" type="text"
+                        [formControl]="productForm.controls['details']" required="">
+                    </div>
+                    <div *ngIf="productForm.controls.details.touched && productForm.controls.details.errors?.required"
+                      class="text text-danger">
+                      Details are required.
+                    </div>
+                  </div>
+
+
+                  <div class="form-group row">
+                    <div class="col-xl-3 col-sm-4">
+                      <label for="exampleFormControlSelect1" class="mb-0">Gender :</label>
+                    </div>
+                    <div class="col-xl-8 col-sm-7">
+                      <select class="form-control digits" id="exampleFormControlSelect1"
+                        [formControl]="productForm.controls['gender']">
+                        <option *ngFor="let item of genders" [value]="item">
+                          {{genderLabelMapping[item]}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="col-xl-3 col-sm-4">
+                      <label for="validationCustom03" class="mb-0">Video Url
+                        :</label>
+                    </div>
+                    <div class="col-xl-8 col-sm-7">
+                      <input class="form-control" id="validationCustom03" type="url"
+                        [formControl]="productForm.controls['videoUrl']">
+                    </div>
+                    <div *ngIf="productForm.controls.videoUrl.touched && productForm.controls.videoUrl.errors?.required"
+                      class="text text-danger">
+                      Video Url is required.
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="col-xl-3 col-sm-4">
+                      <label class="mb-0">Total Products :</label>
+                    </div>
+                    <div class="col-xl-8 col-sm-7">
+                      <div class="qty-box1">
+                        <div class="input-group">
+                          <i class="fa fa-minus btnGtr1" (click)=decrement()></i>
+                          <input class="touchspin1 text-center" name="quantity" [value]="counter"
+                            [formControl]="productForm.controls['quantity']" type="text">
+                          <i class="fa fa-plus btnLess1" (click)=increment()></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="col-xl-3 col-sm-4">
+                      <label for="exampleFormControlSelect1" class="mb-0">Category :</label>
+                    </div>
+                    <div class="col-xl-8 col-sm-7">
+                      <select class="form-control digits" id="exampleFormControlSelect1"
+                        [formControl]="productForm.controls['categoryId']">
+                        <option *ngFor="let item of categories" [value]="item.id">
+                          <!--{{genderLabelMapping[item]}}-->
+                          {{[item.title]}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!--<div class="form-group row">
+                    <div class="col-xl-3 col-sm-4"><label>Description :</label></div>
+                    <div class="col-xl-8 col-sm-7">
+                      <div class="ps-0 description-sm">
+                        <ckeditor [editor]="Editor" data="<p>Hello, world!</p>"></ckeditor>
+                      </div>
+                    </div>
+                  </div>-->
+
+
+                </div>
+
+                <div class="form-group row mb-0">
+                  <div class="col-sm-8 offset-xl-3 offset-sm-4">
+                    <div class="product-buttons">
+                      <button type="submit" [disabled]="productForm.invalid" class="btn btn-primary me-1">Add</button>
+                      <button type="button" class="btn btn-light">Discard</button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Container-fluid Ends-->

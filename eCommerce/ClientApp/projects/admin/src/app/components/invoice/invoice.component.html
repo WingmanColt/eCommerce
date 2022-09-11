@@ -1,0 +1,57 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Invoice List</h5>
+                </div>
+                <div class="card-body">
+                    <div id="batchDelete" class="custom-datatable">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" sortable="no">No</th>
+                                        <th scope="col" sortable="invoice">Invoice</th>
+                                        <th scope="col" sortable="name" >Date</th>
+                                        <th scope="col" sortable="name" >Shipping</th>
+                                        <th scope="col" sortable="name" >Amount</th>
+                                        <th scope="col" sortable="name" >Tax</th>
+                                        <th scope="col" sortable="name" >Total</th>
+                                        <th scope="col" sortable="name" >Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of tableItem$ | async ">
+                                        <td scope="row">
+                                           <span>{{item.no}}</span> 
+                                        </td>
+                                        <td>
+                                            {{item.invoice}}
+                                        </td>
+                                        <td>{{item.date}}</td>
+                                        <td>{{item.shipping}}</td>
+                                        <td>{{item.amount}}</td>
+                                        <td>{{item.tax}}</td>
+                                        <td>{{item.total}}</td>
+                                        <td>
+                                            <a href="javascript:void(0)"><i class='fa fa-edit f-12'></i></a>&nbsp;
+                                            <a href="javascript:void(0)"><i class="fa fa-trash-o"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-center p-2">
+                                <ngb-pagination
+                                  [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
+                                </ngb-pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends-->

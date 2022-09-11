@@ -1,0 +1,44 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Product Lists</h5>
+                </div>
+                <div class="card-body">
+                    <div id="batchDelete" class="custom-datatable">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                <th scope="col">#</th>
+                                <th scope="col" sortable="img" (sort)="onSort($event)">Image</th>
+                                <th scope="col" sortable="title" (sort)="onSort($event)">Product Title</th>
+                                <th scope="col" sortable="entry_type" (sort)="onSort($event)">Empty Type</th>
+                                <th scope="col" sortable="quantity" (sort)="onSort($event)">Quantity</th>
+                                <th scope="col" sortable="action" (sort)="onSort($event)">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let catgory of tableItem$ | async ">
+                                <th scope="row">{{ catgory.id }}</th>
+                                <td>
+                                    <img [src]="catgory.img" class="imgTable" style="width: 20px">
+                                </td>
+                                    <td>{{ catgory.title }}</td>
+                                <td>{{ catgory.entry_type }}</td>
+                                <td>{{ catgory.quantity}}</td>
+                                <td>
+                                    <a href="javascript:void(0)"><i class='fa fa-edit f-12'></i></a>&nbsp;
+                                    <a href="javascript:void(0)"><i class="fa fa-trash-o"></i></a> 
+                                </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

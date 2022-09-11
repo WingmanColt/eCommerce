@@ -1,0 +1,198 @@
+<!-- <app-header-one [sticky]="true"></app-header-one> -->
+<app-header-three [sticky]="true"></app-header-three>
+
+<!-- Home slider start-->
+<section class="p-0">
+  <app-slider [sliders]="sliders" [textClass]="'text-center p-center'" [category]="'bags'"
+    [buttonText]="'save up to 50% off'">
+  </app-slider>
+</section>
+<!-- Home slider End -->
+
+<!-- Product Tab start-->
+<section class="section-b-space">
+  <div class="container">
+    <div class="title2">
+        <h4>new collection</h4>
+        <h2 class="title-inner2">trending products</h2>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="theme-tab">
+          <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="tabs tab-title justify-content-center nav nav-pills" >
+            <li *ngFor="let collection of productCollections" [ngbNavItem]="collection">
+              <a ngbNavLink>
+                 {{ collection }}
+              </a>
+              <ng-template ngbNavContent>
+                <div class="no-slider row">
+                    <ng-container *ngFor="let product of productSpecial | slice:0:4">
+                        <div class="product-box">
+                            <app-product-box-three [product]="product" [currency]="productService?.Currency">
+                            </app-product-box-three>
+                        </div>
+                    </ng-container>
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Product Tab end-->
+
+<!-- category  -->
+<div class="container category-button">
+  <section class="section-b-space border-section border-bottom-0">
+    <div class="row partition1">
+      <div class="col" *ngFor="let category of categories">
+        <a [routerLink]="['/shop']" [queryParams]="{ categoryId: 1}"
+          class="btn btn-outline btn-block">
+          {{category.title}}
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+<!-- category end -->
+
+<!-- category -->
+<div class="category-bg">
+  <div class="container-fluid p-0">
+    <div class="row order-section">
+      <div class="col-sm-4 p-0">
+        <a [routerLink]="['/shop/collection/left/sidebar']" [queryParams]="{ category: 'bags'}" class="image-block">
+          <img src="assets/images/categories/11.jpg" class="img-fluid" alt="">
+        </a>
+      </div>
+      <div class="col-sm-4 p-0">
+        <div class="contain-block even">
+          <div>
+            <h6>new products</h6>
+            <a [routerLink]="['/shop/collection/left/sidebar']" [queryParams]="{ category: 'bags'}">
+              <h2>zipper storage bag</h2>
+            </a>
+            <a [routerLink]="['/shop/collection/left/sidebar']" [queryParams]="{ category: 'bags'}"
+              class="btn btn-solid category-btn">
+              -80% off
+            </a>
+            <a [routerLink]="['/shop/collection/left/sidebar']" [queryParams]="{ category: 'bags'}">
+              <h6><span>shop now</span></h6>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4 p-0">
+        <a [routerLink]="['/shop/collection/left/sidebar']" [queryParams]="{ category: 'bags'}" class="image-block">
+          <img src="assets/images/categories/12.jpg" class="img-fluid" alt="">
+        </a>
+      </div>
+      <div class="col-sm-4 p-0">
+        <div class="contain-block">
+          <div>
+            <h6>on sale</h6>
+            <a [routerLink]="['/shop']" [queryParams]="{ category: 'bags'}">
+              <h2>tucker bag</h2>
+            </a>
+            <a [routerLink]="['/shop']" [queryParams]="{ category: 'bags'}"
+              class="btn btn-solid category-btn">
+              save 30% off
+            </a>
+            <a [routerLink]="['/shop']" [queryParams]="{ category: 'bags'}">
+              <h6><span>shop now</span></h6>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4 p-0">
+        <a [routerLink]="['/shop']" [queryParams]="{ category: 'bags'}"
+          class="image-block even">
+          <img src="assets/images/categories/13.jpg" class="img-fluid" alt="">
+        </a>
+      </div>
+      <div class="col-sm-4 p-0">
+        <div class="contain-block">
+          <div>
+            <h6>summer sale</h6>
+            <a [routerLink]="['/shop']" [queryParams]="{ category: 'bags'}">
+              <h2>gate check bag</h2>
+            </a>
+            <a [routerLink]="['/shop']" [queryParams]="{ category: 'bags'}"
+              class="btn btn-solid category-btn">
+              minimum 50% off
+            </a>
+            <a [routerLink]="['/shop']" [queryParams]="{ category: 'bags'}">
+              <h6><span>shop now</span></h6>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- timer banner -->
+<section>
+  <div class="container">
+    <div class="banner-timer" [ngStyle]="{'background-image': 'url(assets/images/offer-banner-2.jpg)'}">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="banner-text">
+            <h2>Save <span>30% off</span> Digital Watch</h2>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="timer-box">
+            <div class="timer">
+              <p id="demo">
+                <span>
+                  11<span class='padding-l'>:</span><span class='timer-cal'>Days</span>
+                </span>
+                <span>
+                  11<span class='padding-l'>:</span><span class='timer-cal'>Hrs</span>
+                </span>
+                <span>
+                  11<span class='padding-l'>:</span><span class='timer-cal'>Min</span>
+                </span>
+                <span>
+                  11<span class='timer-cal'>Sec</span>
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- timer banner end -->
+
+<!-- category -->
+<section class="section-b-space">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <app-collection [categories]="categories" [category]="'watch'"></app-collection>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- category end -->
+
+<!--  logo section start-->
+<section class="section-b-space">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <app-logo [logos]="logo"></app-logo>
+      </div>
+    </div>
+  </div>
+</section>
+<!--  logo section End-->
+<app-newsletter></app-newsletter>
+<app-footer-one></app-footer-one>

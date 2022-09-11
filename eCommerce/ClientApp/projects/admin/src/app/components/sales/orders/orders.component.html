@@ -1,0 +1,60 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Manage Order</h5>
+        </div>
+        <div class="card-body">
+          <div class="custom-datatable">
+            <form>
+              <div class="mb-3">
+                <input type='text' class="filter-ngx form-control" placeholder='Search...' [(ngModel)]="searchText"
+                  autocomplete="off" />
+              </div>
+            </form>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col" sortable="order_id" (sort)="onSort($event)">Order Id</th>
+                  <th scope="col" sortable="product" (sort)="onSort($event)">Payment</th>
+                  <th scope="col" sortable="payment_status" (sort)="onSort($event)">Payment Status</th>
+                  <th scope="col" sortable="paymeny_method" (sort)="onSort($event)">Payment Mehod</th>
+                  <th scope="col" sortable="order_status" (sort)="onSort($event)">Order Status</th>
+                  <th scope="col" sortable="date" (sort)="onSort($event)">Date</th>
+                  <th scope="col" sortable="total" (sort)="onSort($event)">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of tableItem$ | async | filter:searchText">
+                  <th scope="row">{{ item.order_id }}</th>
+                  <td>
+                    <span *ngFor="let image of item.product">
+                      <img [src]="image" class="img-30 me-2">
+                    </span>
+                  </td>
+                  <td><span class='badge {{item.payment_class}}'>{{ item.payment_status }}</span></td>
+                  <td>{{ item.paymeny_method }}</td>
+                  <td><span class='badge {{item.order_class}}'>{{ item.order_status }}</span></td>
+                  <td>{{item.date}}</td>
+                  <td>{{item.total}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="d-flex justify-content-between p-2">
+              <ngb-pagination [collectionSize]="(total$ | async)!" [(page)]="service.page"
+                [pageSize]="service.pageSize">
+              </ngb-pagination>
+              <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
+                <option [value]="10" [selected] ="true" [ngValue]="2">2 items per page</option>
+                <option [ngValue]="4">4 items per page</option>
+                <option [ngValue]="6">6 items per page</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
