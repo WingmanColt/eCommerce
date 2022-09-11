@@ -1,0 +1,55 @@
+
+CREATE PROCEDURE [dbo].[spOrder](
+@id int = NULL,
+@WillEarnRewardPoints int = NULL, 
+@Tax decimal(10, 2) = NULL, 
+@CheckoutId int = NULL,
+@ProductId int = NULL,
+@Quantity int = NULL,
+@IsPayed bit = false,
+@StatementType NVARCHAR(20) = '',
+@CreatedOn datetime = NULL,
+@ExpiredOn datetime = NULL,
+@Take int = null,
+@newId int = null output)
+AS
+BEGIN
+SET NOCOUNT ON;
+
+      IF @StatementType = 'Create'
+       BEGIN 
+            INSERT INTO [eCommerce_DB].[dbo].[Order]
+			(CheckoutId, ProductId, Quantity, WillEarnRewardPoints, Tax, isPayed, CreatedOn, ExpiredOn) VALUES (@CheckoutId, @ProductId, @Quantity, @WillEarnRewardPoints, @Tax, @IsPayed, @CreatedOn, @ExpiredOn)	 
+            select @newId = Scope_Identity() 
+			  return @newId 
+			  END 
+
+   IF @StatementType = 'Select'
+        BEGIN
+            SELECT * FROM [eCommerce_DB].[dbo].[Order]
+			WHERE id = @id
+        END
+
+	IF @StatementType = 'GetAllCountBy'
+        BEGIN
+            SELECT COUNT(*) FROM [eCommerce_DB].[dbo].[Order]
+				WHERE CheckoutId = COALESCE(NULLIF(@CheckoutId, ''), CheckoutId)
+				OR ProductId = COALESCE(NULLIF(@ProductId, ''), ProductId)
+        END
+
+	IF @StatementType = 'GetAllBy'
+        BEGIN
+
+		SELECT * FROM [eCommerce_DB].[dbo].[Order] AS ent
+			 WHERE ent.CheckoutId = COALESCE(NULLIF(@CheckoutId, ''), ent.CheckoutId)
+		END
+
+      ELSE IF @StatementType = 'Delete'
+        BEGIN
+            DELETE FROM [eCommerce_DB].[dbo].[Order]
+            WHERE id = @id
+        END
+
+END
+
+

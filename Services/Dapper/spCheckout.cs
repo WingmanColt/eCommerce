@@ -7,19 +7,19 @@ using Microsoft.Data.SqlClient;
 using Core.Helpers;
 using Entities.Models;
 using Entities.Enums;
-using Models;
 using Services.Interfaces;
+using Models;
 
 namespace HireMe.StoredProcedures.Services
 {
-    public class spOrder : IspOrder
+    public class spCheckout : IspCheckout
     {
         private readonly IConfiguration _config;
 
-        private string StoreName = "spOrder";
+        private string StoreName = "spCheckout";
         private string ConnectionString { get; set; }
 
-        public spOrder(IConfiguration config)
+        public spCheckout(IConfiguration config)
         {
             _config = config;
             ConnectionString = _config.GetConnectionString("DefaultConnection");
@@ -27,15 +27,15 @@ namespace HireMe.StoredProcedures.Services
 
         private IDbConnection Connection { get { return new SqlConnection(ConnectionString); } }
 
-        public async Task<OperationResult> CRUD(object parameters, ActionEnum action, bool AutoFindParams, string skipAttribute, string userId)
+        public async Task<OperationResult> CRUD(object parameters, ActionEnum action, bool AutoFindParams, string skipAttribute, string? userId)
         {
             var param = new DynamicParameters();
 
 
             if (AutoFindParams)
             {
-                var entity = new Order();
-                entity.Update((OrderInput)parameters);
+                var entity = new Checkout();
+                entity.Update((CheckoutInput)parameters, userId);
 
                 param = DapperPropertiesHelper.AutoParameterFind(entity, skipAttribute);
                 param.Add("newId", dbType: DbType.Int32, size: 50, direction: ParameterDirection.Output);
@@ -75,6 +75,7 @@ namespace HireMe.StoredProcedures.Services
 
         public async Task<IAsyncEnumerable<T>> GetAll<T>(object parameters, GetActionEnum state, bool AutoFindParams, string skipAttribute)
         {
+
             var param = new DynamicParameters();
 
             if (AutoFindParams)
@@ -95,17 +96,19 @@ namespace HireMe.StoredProcedures.Services
             }
         }
 
-        public async Task<T> GetByIdAsync<T>(int id)
+        public async Task<T> GetByUserIdAsync<T>(string id)
         {
             using (IDbConnection connection = Connection)
             {
                 connection.Open();
-                var result = await connection.QueryFirstOrDefaultAsync<T>(StoreName, new { Id = id > 0 ? id : 0, StatementType = "Select" }, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
+                var result = await connection.QueryFirstOrDefaultAsync<T>(StoreName, new { userId = id, StatementType = "SelectByUserId" }, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
                 connection.Close();
 
                 return result;
             }
         }
+
+
 
         public async Task<int> GetAllCountBy(object parameters)
         {

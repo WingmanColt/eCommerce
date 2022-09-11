@@ -8,21 +8,28 @@ using Core.Helpers;
 using Entities.Models;
 using Entities.Enums;
 using Services.Interfaces;
-using Models;
+using Entities.ViewModels.Products;
+using Dasync.Collections;
+using System.Linq;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System;
 
 namespace HireMe.StoredProcedures.Services
 {
     public class spProduct : IspProduct
     {
         private readonly IConfiguration _config;
+        private readonly IProductExtensionService _extProductService;
 
         private string StoreName = "spProduct";
         private string ConnectionString { get; set; }
 
-        public spProduct(IConfiguration config)
+        public spProduct(IConfiguration config, IProductExtensionService extProductService)
         {
             _config = config;
             ConnectionString = _config.GetConnectionString("DefaultConnection");
+            _extProductService = extProductService;
         }
 
         private IDbConnection Connection { get { return new SqlConnection(ConnectionString); } }
@@ -75,7 +82,29 @@ namespace HireMe.StoredProcedures.Services
 
         public async Task<IAsyncEnumerable<T>> GetAll<T>(object parameters, GetActionEnum state, bool AutoFindParams, string skipAttribute)
         {
+            
+            var param = new DynamicParameters();
 
+            if (AutoFindParams)
+                param = DapperPropertiesHelper.AutoParameterFind(parameters, skipAttribute);
+            else
+                param.AddDynamicParams(parameters);
+
+            var model = new { StatementType = state.GetDisplayName(), Id = 0 };
+            param.AddDynamicParams(model);
+            
+            using (IDbConnection connection = Connection)
+            {
+                connection.Open();
+                var result = await connection.QueryAsync<T>(StoreName, param, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
+                connection.Close();
+
+                return result.ToAsyncEnumerable();
+            }
+        }
+
+        public async Task<IAsyncEnumerable<ProductVW>> GetAll2(object parameters, GetActionEnum state, bool AutoFindParams, string skipAttribute)
+        {
             var param = new DynamicParameters();
 
             if (AutoFindParams)
@@ -89,25 +118,88 @@ namespace HireMe.StoredProcedures.Services
             using (IDbConnection connection = Connection)
             {
                 connection.Open();
-                var result = await connection.QueryAsync<T>(StoreName, param, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
-                connection.Close();
+                var result = await connection.QueryMultipleAsync(StoreName, param, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
+               
+                var res = result.Read<ProductVW>().ToAsyncEnumerable();
 
-                return result.ToAsyncEnumerable();
-            }
+                var img = result.Read<Images>().ToAsyncEnumerable();
+                var variant = result.Read<Variants>().ToAsyncEnumerable();
+
+                var images = new List<Images>();
+                var variants = new List<Variants>();
+
+                //var concurentBag = new ConcurrentBag<ProductVW>();
+                //concurentBag = res;
+
+                //    var options = new ParallelOptions { MaxDegreeOfParallelism = -1 };
+                //  await Parallel.ForEachAsync(myResultSet, options, async (product, cancelationtoken) =>
+                // {
+                await foreach (var product in res)
+                    {
+                    // Clear Lists
+                    images.Clear();
+                    variants.Clear();
+
+                    // Images
+                    await foreach (var itemImage in img)
+                        {
+                            if (itemImage.ProductId == product.Id)
+                            {
+                                images.Add(itemImage);
+                            } 
+                        }
+
+                    product.Images = images;
+                    product.Images = product.Images.ToList();
+
+                    // Variants
+                    await foreach (var itemVariant in variant)
+                    {
+                        if (itemVariant.ProductId == product.Id)
+                        {
+                            variants.Add(itemVariant);
+                        }
+                    }
+                    product.Variants = variants;
+                    product.Variants = product.Variants.ToList();
+
+                }
+
+               // });
+
+                connection.Close();
+                return res;
+             }
         }
 
-        public async Task<T> GetByIdAsync<T>(int id)
+        public async Task<ProductVW> GetByIdAsync(int id)
+        {
+            if (id <= 0)
+                return null;
+
+            using (IDbConnection connection = Connection)
+            {
+                connection.Open();
+                var result = await connection.QueryFirstOrDefaultAsync<ProductVW>(StoreName, new { Id = id > 0 ? id : 0, StatementType = "Select" }, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
+                connection.Close();
+                        
+                result.Image = _extProductService.GetImagesAsync(id);
+                result.Variant = _extProductService.GetVariantsAsync(id);
+                
+                return result;
+            }
+        }
+        public async Task<T> GetByTitleAsync<T>(string title)
         {
             using (IDbConnection connection = Connection)
             {
                 connection.Open();
-                var result = await connection.QueryFirstOrDefaultAsync<T>(StoreName, new { Id = id > 0 ? id : 0, StatementType = "Select" }, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
+                var result = await connection.QueryFirstOrDefaultAsync<T>(StoreName, new { Title = title.Replace(' ', '-'), StatementType = "SelectByTitle" }, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
                 connection.Close();
 
                 return result;
             }
         }
-
         public async Task<int> GetAllCountBy(object parameters)
         {
             var param = new DynamicParameters();

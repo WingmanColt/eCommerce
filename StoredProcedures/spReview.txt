@@ -1,0 +1,50 @@
+
+CREATE PROCEDURE [dbo].[spReviews](
+@id int = NULL,
+@ProductId int = NULL, 
+@ProductStars int = NULL,
+@FirstName nvarchar(20) = NULL,
+@LastName nvarchar(20) = NULL,
+@Email nvarchar(20) = NULL,
+@About nvarchar(100) = NULL,
+@SendToSupport bit = 0,
+@CreatedOn datetime = NULL,
+@StatementType NVARCHAR(20) = '')
+AS
+BEGIN
+SET NOCOUNT ON;
+
+      IF @StatementType = 'Create'
+       BEGIN 
+            INSERT INTO [eCommerce_DB].[dbo].[Reviews]
+			(ProductId, ProductStars, FirstName, LastName, Email, About, SendToSupport, CreatedOn) VALUES (@ProductId, @ProductStars, @FirstName, @LastName, @Email, @About, @SendToSupport, @CreatedOn)	 
+               END 
+
+   IF @StatementType = 'Select'
+        BEGIN
+            SELECT * FROM [eCommerce_DB].[dbo].[Reviews]
+			WHERE ProductId = @ProductId
+        END
+		
+	IF @StatementType = 'SelectForSupport'
+        BEGIN
+            SELECT * FROM [eCommerce_DB].[dbo].[Reviews]
+			WHERE SendToSupport = @SendToSupport;
+        END
+
+	IF @StatementType = 'GetAllCountBy'
+        BEGIN
+            SELECT COUNT(*) FROM [eCommerce_DB].[dbo].[Reviews]
+				WHERE ProductId = COALESCE(NULLIF(@ProductId, ''), ProductId)
+				OR SendToSupport = COALESCE(NULLIF(@sendToSupport, ''), sendToSupport)
+				
+        END
+
+
+      ELSE IF @StatementType = 'Delete'
+        BEGIN
+            DELETE FROM [eCommerce_DB].[dbo].[Reviews]
+            WHERE ProductId = @ProductId
+        END
+
+END

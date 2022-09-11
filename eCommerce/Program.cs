@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Models;
+using Payments;
 using Services;
 using Services.Interfaces;
 using System.Text;
@@ -78,11 +79,21 @@ builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 
 // Stored Services
 builder.Services.AddScoped<IspCategories, spCategories>();
-builder.Services.AddScoped<IspOrder, spOrder>();
 builder.Services.AddScoped<IspProduct, spProduct>();
+builder.Services.AddScoped<IspCart, spCart>();
+builder.Services.AddScoped<IspOrder, spOrder>();
+builder.Services.AddScoped<IspCheckout, spCheckout>();
+builder.Services.AddScoped<IspFavourite, spFavourite>();
 builder.Services.AddTransient<IProductExtensionService, ProductExtensionService>();
 builder.Services.AddScoped<JwtHandler>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ICartItemService, CartItemService>();
+builder.Services.AddScoped<IspReviews, spReviews>();
+
+builder.Services.AddHttpClient<PaypalClient>("Paypal", conf =>
+{
+    conf.BaseAddress = new Uri(builder.Configuration["PayPal-Sandbox:Url"]);
+});
 
 var app = builder.Build();
 

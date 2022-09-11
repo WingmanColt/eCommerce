@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Enums
 {
+
     public enum ApproveType : int
     {
         Waiting = 0,

@@ -20,7 +20,7 @@ namespace Services
         public async Task<OperationResult> CreateImage(IQueryable<Images> entities)
         {
             await _imagesRepository.AddRangeAsync(entities);
-           
+
             var result = await _imagesRepository.SaveChangesAsync();
             return result;
         }

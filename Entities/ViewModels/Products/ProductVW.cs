@@ -1,18 +1,21 @@
 ﻿using Entities.Enums;
 using Entities.Models;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 
 namespace Entities.ViewModels.Products
 {
-    public class ProductVW : BaseViewModel
+    public class ProductVW 
     {
+        public int Id { get; set; }
+
         public string? Title { get; set; }
         public string? Details { get; set; }
         public string? Description { get; set; }
         public string? VideoUrl { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
-        public decimal DiscountRate { get; set; }
+        public int DiscountRate { get; set; }
         public int CategoryId { get; set; }
         public string? UserId { get; set; }
 
@@ -35,7 +38,9 @@ namespace Entities.ViewModels.Products
         public virtual IAsyncEnumerable<Variants> Variant { get; set; }
         public virtual IAsyncEnumerable<Images> Image { get; set; }
 
-        //public string? int Product { get; set; }
+        public virtual IEnumerable<Variants> Variants { get; set; }
+        public virtual IEnumerable<Images> Images { get; set; }
+
         [NotMapped]
         public string StatementType { get; set; }
 

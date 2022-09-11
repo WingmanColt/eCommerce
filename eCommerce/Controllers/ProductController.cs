@@ -42,48 +42,55 @@ namespace eCommerce.Controllers
 
         [HttpGet]
         [Route("listing")]
-        public async Task<IActionResult> Index(int currentPage = 1, int? categoryid = 0, string? SearchString = null)
+        public async Task<IActionResult> Index(int? categoryid = 0, string? SearchString = null)
         {
-            // var filter = new Filter();
-            var viewModel = new ProductListing
-            {
-               // AllLocations = _locationService.GetAllSelectList(),
-              //  AllCategories = _categoriesService.GetAllSelectList()
-            };
+            var result = await _spProductService.GetAll2(new { Title = SearchString, Categoryid = categoryid }, GetActionEnum.GetAllFiltering, false, null);
 
-
-            viewModel.Result = await _spProductService.GetAll<ProductVW>(new { Title = SearchString, Categoryid = categoryid }, GetActionEnum.GetAllFiltering, false, null);
-
-            if (await viewModel.Result.AnyAsync()) // prevent 'SqlException: The offset specified in a OFFSET clause may not be negative.'
-            {
-                int count = await viewModel.Result.CountAsync().ConfigureAwait(false);
-                viewModel.Pager = new Pager(count, currentPage);
-
-                viewModel.Result = viewModel.Result
-                .Skip((viewModel.Pager.CurrentPage - 1) * viewModel.Pager.PageSize)
-                .Take(viewModel.Pager.PageSize);
-            }
-            else return NotFound(noResults);
-
-            return Ok(viewModel);
+            return Ok(result);
         }
+        public class ProductByLocalStore
+        {
+            public int productId { get; set; }
+            public int quantity { get; set; }
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("get-all-by-Ids")]
+        public async Task<IActionResult> Details([FromBody] IAsyncEnumerable<ProductByLocalStore> products)
+        {
+            List<ProductVW> allProducts = new List<ProductVW>();
+
+            ProductVW productEntity;
+            await foreach (var product in products)
+            {
+                productEntity = await _spProductService.GetByIdAsync(product.productId);
+                allProducts.Add(productEntity);
+            }
 
 
+          //  entity.Image = _extProductService.GetImagesAsync(entity.Id);
+          //  entity.Variant = _extProductService.GetVariantsAsync(entity.Id);
+
+            return this.Ok(allProducts);
+        }
         [HttpGet]
         [AllowAnonymous]
-        [Route("info/{id}")]
-        public async Task<IActionResult> Details(int id)
+        [Route("info")]
+        public async Task<IActionResult> Details(string title)
         {
-            var entity = await _spProductService.GetByIdAsync<ProductVW>(id);
+            var entity = await _spProductService.GetByTitleAsync<ProductVW>(title);
+
             if (entity is null)
             {
                 return NotFound(itemNotFound);
             }
 
-           // entity.Views++;
+            entity.Image = _extProductService.GetImagesAsync(entity.Id);
+            entity.Variant = _extProductService.GetVariantsAsync(entity.Id);
 
             return this.Ok(entity);
         }
+
 
         [HttpPost]
         [Route("create")]
@@ -148,7 +155,7 @@ namespace eCommerce.Controllers
             return this.Ok(entity);
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -169,9 +176,9 @@ namespace eCommerce.Controllers
 
         [HttpGet]
         [Route("getSpecialProduct")]
-        public async Task<IActionResult> GetSpecialProduct(int Type, int Take, int Skip)
+        public async Task<IActionResult> GetSpecialProduct()
         {
-            var result = await _spProductService.GetAll<ProductVW>(null, EnumHelper.GetEnumValue<GetActionEnum>(Type), false, null);
+            var result = await _spProductService.GetAll<ProductVW>(null, GetActionEnum.GetSpecialProduct, false, null);
            
             IAsyncEnumerable<ProductVW> result2 = result;
             await foreach (var item in result)
@@ -180,17 +187,19 @@ namespace eCommerce.Controllers
                var variants = _extProductService.GetVariantsAsync(item.Id);
 
                 result2 = result.Select(x => new ProductVW { 
+                   Id = x.Id,
                    Title = x.Title, 
                    Price = x.Price,
                    Rating = x.Rating,   
                    Image = images,
-                   Variant = variants
+                   Variant = variants,
+                   Quantity = x.Quantity
                   });
             }
 
 
             
-             return Ok(result2?.Skip(Skip).Take(Take));                
+             return Ok(result2.Take(12));                
         }
 
 

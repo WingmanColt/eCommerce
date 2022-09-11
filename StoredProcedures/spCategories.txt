@@ -1,0 +1,51 @@
+
+CREATE PROCEDURE [dbo].[spCategories](
+@id int = NULL,
+@Title nvarchar(50) = NULL, 
+@Icon nvarchar(15) = NULL,
+@ProductsCount int = NULL,
+@StatementType NVARCHAR(20) = '',
+@Take int = null)
+AS
+BEGIN
+SET NOCOUNT ON;
+
+      IF @StatementType = 'Create'
+       BEGIN 
+            INSERT INTO [eCommerce_DB].[dbo].[Category]
+			(Title, Icon, ProductsCount) VALUES (@Title, @Icon, @ProductsCount)	 
+               END 
+
+     IF @StatementType = 'Select'
+        BEGIN
+            SELECT * FROM [eCommerce_DB].[dbo].[Category]
+			WHERE id = @id
+        END
+
+	 IF @StatementType = 'GetAll'
+        BEGIN
+
+		SELECT * FROM [eCommerce_DB].[dbo].[Category] AS ent
+		END
+
+	IF @StatementType = 'GetAllCountBy'
+        BEGIN
+            SELECT ProductsCount FROM [eCommerce_DB].[dbo].[Category]
+			WHERE Id = @id;
+        END
+
+
+
+	 IF @StatementType = 'Update'
+        BEGIN
+            UPDATE [eCommerce_DB].[dbo].[Category] SET 
+			ProductsCount = @ProductsCount
+			 WHERE Id = @id
+        END
+
+      ELSE IF @StatementType = 'Delete'
+        BEGIN
+            TRUNCATE TABLE [eCommerce_DB].[dbo].[Category];
+        END
+
+END

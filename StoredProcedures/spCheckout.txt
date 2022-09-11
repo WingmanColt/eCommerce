@@ -1,0 +1,72 @@
+
+CREATE PROCEDURE [dbo].[spCheckout](
+@id int = NULL, 
+@FirstName nvarchar(20) = NULL,
+@LastName nvarchar(20) = NULL,
+@Email nvarchar(20) = NULL,
+@Phone nvarchar(20) = NULL,
+@Adress nvarchar(30) = NULL,
+@Country nvarchar(20) = NULL,
+@Town nvarchar(20) = NULL,
+@State nvarchar(20) = NULL,
+@PostalCode nvarchar(20) = NULL,
+
+@IsGuest bit = 0,
+@PickUpAtHome bit = 0,
+@ApproveType int = 0,
+
+@CreatedOn datetime = NULL,
+@ExpiredOn datetime = NULL,
+
+@UserId nvarchar(50) = NULL,
+@StatementType NVARCHAR(20) = '',
+@newId int = null output)
+AS
+BEGIN
+SET NOCOUNT ON;
+
+      IF @StatementType = 'Create'
+       BEGIN 
+            INSERT INTO [eCommerce_DB].[dbo].[Checkout]
+			(FirstName, LastName, Email, Phone, Adress, Country, Town, State, PostalCode, IsGuest, PickupAtHome, CreatedOn, ExpiredOn, UserId, ApproveType) 
+			VALUES 
+			(@FirstName, @LastName, @Email, @Phone, @Adress, @Country, @Town, @State, @PostalCode, @IsGuest, @PickupAtHome, @CreatedOn, @ExpiredOn, @UserId, @ApproveType)
+              
+			 select @newId = Scope_Identity() 
+			  END 
+
+   IF @StatementType = 'Select'
+        BEGIN
+            SELECT * FROM [eCommerce_DB].[dbo].[Checkout]
+			WHERE id = @id
+        END
+		
+   IF @StatementType = 'SelectByUserId'
+        BEGIN
+            SELECT * FROM [eCommerce_DB].[dbo].[Checkout]
+			WHERE UserId = @UserId 
+        END
+
+	IF @StatementType = 'GetAllCountBy'
+        BEGIN
+            SELECT COUNT(*) FROM [eCommerce_DB].[dbo].[Checkout]
+				WHERE UserId = COALESCE(NULLIF(@UserId, ''), UserId)
+				
+        END
+
+	IF @StatementType = 'GetAllBy'
+        BEGIN
+
+		SELECT * FROM [eCommerce_DB].[dbo].[Checkout] AS ent
+			 WHERE ent.UserId = COALESCE(NULLIF(@UserId, ''), ent.UserId)
+		END
+
+      ELSE IF @StatementType = 'Delete'
+        BEGIN
+            DELETE FROM [eCommerce_DB].[dbo].[Checkout]
+            WHERE id = @id
+        END
+
+END
+
+

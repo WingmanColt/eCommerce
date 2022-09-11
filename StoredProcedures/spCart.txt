@@ -1,0 +1,49 @@
+CREATE PROCEDURE [dbo].[spCart](
+@id int = NULL,
+@TotalCost decimal(10, 2) = null, 
+@TotalItems int = NULL, 
+@UserId nvarchar(50) = NULL,
+@StatementType NVARCHAR(20) = '')
+AS
+BEGIN
+SET NOCOUNT ON;
+
+      IF @StatementType = 'Create'
+       BEGIN 
+            INSERT INTO [eCommerce_DB].[dbo].[Cart]
+			(UserId) VALUES (@UserId)	 
+               END 
+
+   IF @StatementType = 'Select'
+        BEGIN
+            SELECT * FROM [eCommerce_DB].[dbo].[Cart]
+			WHERE id = @id
+        END
+		
+   IF @StatementType = 'SelectByUserId'
+        BEGIN
+            SELECT * FROM [eCommerce_DB].[dbo].[Cart]
+			WHERE UserId = @UserId 
+        END
+
+	IF @StatementType = 'GetAllCountBy'
+        BEGIN
+            SELECT COUNT(*) FROM [eCommerce_DB].[dbo].[Cart]
+				WHERE UserId = COALESCE(NULLIF(@UserId, ''), UserId)
+				
+        END
+
+	IF @StatementType = 'GetAllBy'
+        BEGIN
+
+		SELECT * FROM [eCommerce_DB].[dbo].[Cart] AS ent
+			 WHERE ent.UserId = COALESCE(NULLIF(@UserId, ''), ent.UserId)
+		END
+
+      ELSE IF @StatementType = 'Delete'
+        BEGIN
+            DELETE FROM [eCommerce_DB].[dbo].[Cart]
+            WHERE id = @id
+        END
+
+END

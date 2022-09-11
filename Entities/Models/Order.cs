@@ -1,26 +1,26 @@
 ﻿using Ardalis.GuardClauses;
-using Models;
 
 namespace Entities.Models
 {
     public class Order
     {
         public int Id { get; set; }
-        public string? UserId { get; set; }
         public int ProductId { get; set; }
+        public int CheckoutId { get; set; }
         public bool isPayed { get; set; }
-        public int? CategoryId { get; set; }
+        public int? Quantity { get; set; }
+        
         public int? WillEarnRewardPoints { get; set; }
         public decimal? Tax { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime ExpiredOn { get; set; }
 
-        public void Update(OrderInput input, User user)
+        public void Update(OrderInput input)
         {
             //Id = input.Id;
 
-            Guard.Against.NegativeOrZero(input.CategoryId, nameof(input.CategoryId));
-            CategoryId = input.CategoryId;
+            Guard.Against.NegativeOrZero(input.Quantity, nameof(input.Quantity));
+            Quantity = input.Quantity;
 
             Guard.Against.NegativeOrZero(input.ProductId, nameof(input.ProductId));
             ProductId = input.ProductId;
@@ -29,9 +29,10 @@ namespace Entities.Models
             Tax = input.Tax;
 
             isPayed = input.isPayed;
-            UserId = user?.Id;
+            CheckoutId = input.CheckoutId;
+
             CreatedOn = DateTime.Now;
-            ExpiredOn = input.ExpiredOn;
+            ExpiredOn = DateTime.Now.AddDays(30);
         }
     }
  }

@@ -39,12 +39,6 @@ namespace HireMe.StoredProcedures.Enums
         GetAll = 3,
 
         [Display(Name = "GetSpecialProduct")]
-        GetSpecialProduct = 4,
-
-        [Display(Name = "GetSpecialProduct_2")]
-        GetSpecialProduct_2 = 5,
-
-        [Display(Name = "GetSpecialProduct_3")]
-        GetSpecialProduct_3 = 6
+        GetSpecialProduct = 4
     }
 }

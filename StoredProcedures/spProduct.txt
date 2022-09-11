@@ -1,0 +1,214 @@
+
+CREATE PROCEDURE [dbo].[spProduct](
+@id int = NULL,
+@Title nvarchar(50) = NULL, 
+@Details nvarchar(50) = NULL,
+@Description nvarchar(100) = NULL,
+@VideoUrl nvarchar(30) = NULL,
+@Quantity int = NULL,
+@Price decimal(10,2) = NULL,
+@DiscountRate decimal(10,2) = 0,
+@CategoryId int = 0,
+@UserId varchar(60) = NULL,
+
+@IsShippable bit = 0,
+@PickupInStore bit = 0,
+@IsReturnRequestAllowed bit = 0,
+
+@Rating decimal(10,2) = 0.0,
+@RatingVotes int = 0,
+@VotedUsers int = 0,
+@Views int = 0,
+
+@ApproveType int = 0,
+@ItemType int = 0,
+@PremiumPackage int = 0,
+@Status int = 0,
+@Gender int = 0,
+
+@CreatedOn datetime = NULL,
+@ExpiredOn datetime = NULL,
+
+@isInFavourites bit = 0,
+@StatementType NVARCHAR(20) = '',
+@CurrentUser varchar(60) = NULL,
+@Take int = null,
+@newId int = null output)
+AS
+BEGIN
+SET NOCOUNT ON;
+
+      IF @StatementType = 'Create'
+       BEGIN 
+            INSERT INTO [eCommerce_DB].[dbo].[Product](
+Title, 
+Details,
+Description,
+VideoUrl,
+Quantity,
+Price,
+DiscountRate,
+CategoryId,
+UserId,
+IsShippable,
+PickupInStore,
+IsReturnRequestAllowed,
+Rating,
+RatingVotes,
+VotedUsers,
+Views,
+Gender,
+ApproveType,
+ItemType,
+PremiumPackage,
+Status,
+CreatedOn,
+ExpiredOn
+) VALUES (
+@Title, 
+@Details,
+@Description,
+@VideoUrl,
+@Quantity,
+@Price,
+@DiscountRate,
+@CategoryId,
+@UserId,
+
+@IsShippable,
+@PickupInStore,
+@IsReturnRequestAllowed,
+
+@Rating,
+@RatingVotes,
+@VotedUsers,
+@Views,
+@Gender,
+@ApproveType,
+@ItemType,
+@PremiumPackage,
+@Status,
+
+@CreatedOn,
+@ExpiredOn
+)	 
+			 select @newId = Scope_Identity() 
+			  return @newId 
+               END 
+
+   IF @StatementType = 'Select'
+        BEGIN
+            SELECT * FROM [eCommerce_DB].[dbo].[Product]
+			WHERE id = @id
+        END
+
+		   IF @StatementType = 'SelectByTitle'
+        BEGIN
+            SELECT * FROM [eCommerce_DB].[dbo].[Product]
+			WHERE Title = @Title
+        END
+
+	IF @StatementType = 'GetAllCountBy'
+        BEGIN
+            SELECT COUNT(*) FROM [eCommerce_DB].[dbo].[Product]
+			WHERE CategoryId = COALESCE(NULLIF(@CategoryId, ''), CategoryId)
+			AND UserId = COALESCE(NULLIF(@UserId, ''), UserId)
+        END
+
+	IF @StatementType = 'AddRating'
+        BEGIN
+
+		  MERGE [eCommerce_DB].[dbo].[Product] AS Target
+		  USING [eCommerce_DB].[dbo].[Product] AS Source
+		  ON Source.Id = Target.Id
+ 
+    -- For Updates
+    WHEN MATCHED THEN UPDATE SET
+        Target.RatingVotes	+= @RatingVotes,
+        Target.Rating += ((Source.Rating * @RatingVotes) + @Rating) / (Source.RatingVotes + 1),
+		Target.VotedUsers += 1;
+		END
+
+   IF @StatementType = 'GetAllFiltering'
+        BEGIN
+			 /*SELECT * FROM [eCommerce_DB].[dbo].[Product] AS ent
+			WHERE ent.CategoryId = COALESCE(NULLIF(@CategoryId, ''), ent.CategoryId)
+			 AND ent.Title = COALESCE(NULLIF(@Title, ''), ent.Title)*/
+
+  SELECT  *
+    FROM  [dbo].[Product] AS T1
+	 
+    --Second select is second table, etc.
+    SELECT  *
+    FROM  [dbo].[Image] AS T2
+
+    --Third table...
+	SELECT  *
+    FROM  [dbo].[Variant] AS T3
+
+
+	/*
+    --Can be more complex, as long as there is a result set
+    SELECT  *
+    FROM    Product            s
+    JOIN    [eCommerce_DB].[dbo].[Image]    t2
+    ON      s.Id    =   t2.ProductId
+    JOIN    [eCommerce_DB].[dbo].[Variant]    t3
+    ON      t3.ProductId  =   t2.ProductId;*/
+        END
+
+		   IF @StatementType = 'GetSpecialProduct'
+        BEGIN
+		SELECT * FROM [eCommerce_DB].[dbo].[Product] as ent 
+		ORDER BY ent.CreatedOn, ent.Rating DESC
+        END	
+
+		   IF @StatementType = 'GetAllBy'
+        BEGIN
+
+		SELECT * FROM [eCommerce_DB].[dbo].[Product] AS ent
+			 WHERE ent.CategoryId = COALESCE(NULLIF(@CategoryId, ''), ent.CategoryId)
+			 AND ent.UserId = COALESCE(NULLIF(@UserId, ''), ent.UserId)
+		END
+
+
+IF @StatementType = 'Update'
+        BEGIN
+            UPDATE [eCommerce_DB].[dbo].[Product] SET 
+Title = @Title, 
+Details = @Details,
+Description = @Description,
+VideoUrl = @VideoUrl,
+Quantity = @Quantity,
+Price = @Price,
+DiscountRate = @DiscountRate,
+CategoryId = @CategoryId,
+UserId = @UserId,
+IsShippable = @IsShippable,
+PickupInStore = @PickupInStore,
+IsReturnRequestAllowed = @IsReturnRequestAllowed,
+Rating = @Rating,
+RatingVotes = @RatingVotes,
+VotedUsers = @VotedUsers,
+Views = @Views,
+Gender = @Gender,
+ApproveType = @ApproveType,
+ItemType = @ItemType,
+PremiumPackage = @PremiumPackage,
+Status = @Status,
+CreatedOn = @CreatedOn,
+ExpiredOn = @ExpiredOn
+			 WHERE Id = @id
+
+			 select @newId = Scope_Identity() 
+			  return @newId 
+        END
+      ELSE IF @StatementType = 'Delete'
+        BEGIN
+            DELETE FROM [eCommerce_DB].[dbo].[Product]
+            WHERE id = @id
+        END
+
+END
+
+

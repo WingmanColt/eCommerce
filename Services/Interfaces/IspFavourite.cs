@@ -1,10 +1,9 @@
 ﻿using Core.Helpers;
 using HireMe.StoredProcedures.Enums;
-using Models;
 
 namespace Services.Interfaces
 {
-    public interface IspOrder
+    public interface IspFavourite
     {
         Task<OperationResult> CRUD(object parameters, ActionEnum action, bool AutoFindParams, string skipAttribute, string userId);
         Task<IAsyncEnumerable<T>> GetAll<T>(object parameters, GetActionEnum state, bool AutoFindParams, string skipAttribute);

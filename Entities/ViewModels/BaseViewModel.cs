@@ -6,7 +6,7 @@ namespace Entities.ViewModels
     {
         public int Id { get; set; }
 
-        public Pager Pager { get; set; }
+        public Pager? Pager { get; set; }
        // public Filter Filter { get; set; }
 
     }
